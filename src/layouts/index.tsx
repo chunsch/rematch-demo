@@ -1,19 +1,19 @@
 import React from 'react';
-import styles from './index.css';
+import { StoreContext } from 'redux-react-hook';
+import { store } from '@/models';
 
-export type BasicLayoutComponent<P> = React.SFC<P>;
+export type BasicLayoutComponent<P> = React.FC<P>;
 
 export interface BasicLayoutProps extends React.Props<any> {
   history?: History;
   location?: Location;
 }
 
-const BasicLayout: BasicLayoutComponent<BasicLayoutProps> = props => {
+const BasicLayout: BasicLayoutComponent<BasicLayoutProps> = ({ children }) => {
   return (
-    <div className={styles.normal}>
-      <h1 className={styles.title}>Yay! Welcome to umi!</h1>
-      { props.children }
-    </div>
+    <StoreContext.Provider value={store}>
+      {children}
+    </StoreContext.Provider>
   );
 };
 
