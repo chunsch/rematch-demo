@@ -21,18 +21,17 @@ type Topic = {
   author: Author;
 }
 
-type Pagination = {
-  current: number;
-  pageSize: number;
+type Category = {
+  hasMore: boolean;
+  loading: boolean;
+  pageIndex: number;
+  dataSource: Topic[];
 };
 
-type Category = {
-  dataSource: Topic[];
-  pagination: Pagination;
-};
+type Tab = 'all' | 'ask' | 'share' | 'job' | 'good';
 
 type State = {
-  tab: 'all' | 'ask' | 'share' | 'job' | 'good';
+  tab: Tab;
   all: Category;
   ask: Category;
   share: Category;
@@ -40,12 +39,13 @@ type State = {
   good: Category;
 }
 
+const pageSize = 10;
+
 const initCategory: Category = {
+  hasMore: true,
+  loading: false,
+  pageIndex: 0,
   dataSource: [],
-  pagination: {
-    current: 1,
-    pageSize: 10,
-  },
 };
 
 export default createModel<State>({
@@ -61,23 +61,36 @@ export default createModel<State>({
   },
 
   actions: {
-    async getList({ tab, page, limit }) {
-      const list = await request('https://cnodejs.org/api/v1/topics', {
-      });
+    async getList(newTab: Tab, rootState: { topics: State }) {
+      const { topics } = rootState;
+      const tab = newTab || topics.tab;
+      const pageIndex = topics[tab].pageIndex + 1;
       this.setState({
-        list,
+        tab,
+        [tab]: {
+          ...topics[tab],
+          loading: true,
+        }
       });
+      const { success, data } = await request('https://cnodejs.org/api/v1/topics', {
+        params: {
+          tab,
+          page: pageIndex,
+          limit: pageSize,
+          mdrender: false,
+        }
+      });
+      if (success) {
+        const { dataSource } = topics[tab];
+        this.setState({
+          [tab]: {
+            pageIndex,
+            loading: false,
+            hasMore: data.length === pageSize,
+            dataSource: [...dataSource, ...data],
+          },
+        });
+      }
     },
   },
-
-  // actions: (dispatch) => ({
-  //   async getList() {
-  //     const list = await request('/api/v1/topics', {
-  //       baseUrl: 'https://cnodejs.org',
-  //     });
-  //     dispatch.topics.setState({
-  //       list,
-  //     });
-  //   },
-  // }),
 });

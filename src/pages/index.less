@@ -1,0 +1,71 @@
+.textOverflowMulti(@line: 3, @bg: #fff) {
+  overflow: hidden;
+  position: relative;
+  line-height: 1.5em;
+  max-height: @line * 1.5em;
+  text-align: justify;
+  margin-right: -1em;
+  padding-right: 1em;
+
+  &:before {
+    background: @bg;
+    content: '...';
+    padding: 0 1px;
+    position: absolute;
+    right: 14px;
+    bottom: 0;
+  }
+
+  &:after {
+    background: white;
+    content: '';
+    margin-top: 0.2em;
+    position: absolute;
+    right: 14px;
+    width: 1em;
+    height: 1em;
+  }
+}
+
+:global {
+  .ant-tabs {
+    padding-top: 45px;
+    background-color: #fff;
+  }
+
+  .ant-tabs .ant-tabs-bar {
+    margin-bottom: 0;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  .ant-tabs-nav-scroll {
+    display: flex;
+  }
+
+  .ant-tabs-nav .ant-tabs-nav-animated {
+    margin: auto;
+  }
+}
+
+.list {
+  max-width: 640px;
+  margin: auto;
+  overflow: auto;
+  padding: 8px 24px;
+  height: 100vh;
+}
+
+.content {
+  .textOverflowMulti(3);
+  width: 100%;
+}
+
+.loading {
+  position: absolute;
+  bottom: 40px;
+  width: 100%;
+  text-align: center;
+}

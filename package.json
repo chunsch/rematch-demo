@@ -13,6 +13,7 @@
     "antd": "^3.12.1",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
+    "react-infinite-scroller": "^1.2.4",
     "react-redux": "^6.0.1",
     "redux-react-hook": "^3.2.1",
     "umi-request": "^1.0.4"
