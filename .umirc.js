@@ -11,7 +11,6 @@ export default {
       dynamicImport: { webpackChunkName: true },
       title: 'rematch-demo',
       dll: true,
-
       routes: {
         exclude: [
           /components\//,
